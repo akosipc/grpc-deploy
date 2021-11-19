@@ -1,0 +1,23 @@
+#!/usr/bin/env ruby
+
+require 'rubygems'
+require 'bundler'
+Bundler.setup
+require 'gruf'
+
+$LOAD_PATH.unshift File.expand_path('../lib/healthcheck/protos', __dir__)
+$LOAD_PATH.unshift File.expand_path('../app/controllers', __dir__)
+
+puts $LOAD_PATH
+
+Dir[File.join('./lib/healthcheck/protos/*.rb')].each {|f| require f }
+
+Gruf.configure do |config|
+  config.server_binding_url = 'localhost:3000'
+  config.backtrace_on_error = true
+end
+
+Gruf.services << Deployer::Healthcheck::Service
+
+cli = Gruf::Cli::Executor.new
+cli.run

@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package deployer;
+
+service Healthcheck {
+  rpc SayHello (Input) returns (Output) {}
+}
+
+message Input {
+}
+
+message Output {
+  string message = 1;
+}
